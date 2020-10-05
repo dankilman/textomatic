@@ -16,6 +16,7 @@ tabulate = "^0.8.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+black = "^20.8b1"
 
 [tool.poetry.scripts]
 tm = "textomatic.main:main"
