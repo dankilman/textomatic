@@ -7,27 +7,29 @@ Scratchpad for tabular data transformations
 pip install textomatic
 ```
 
+At the moment, Python 3.8 or greater is required.
+
 ## Running
 Start it by running
 ```shell script
-tm
+$ tm
 ```
 
 The above will start `textomatic` with a blank slate.
 
 You can load a file by passing it as the first argument:
 ```shell script
-tm <PATH_TO_FILE>
+$ tm <PATH_TO_FILE>
 ```
 
 You can also pipe content from stdin:
 ```shell script
-ls | tm
+$ ls | tm
 ```
 
 To see what arguments/options are available run:
 ```
-tm --help
+$ tm --help
 ```
 
 When `textomatic` is running, type `F1` to see available keyboard shortcuts.
