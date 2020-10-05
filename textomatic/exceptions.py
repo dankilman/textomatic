@@ -1,0 +1,2 @@
+class ProcessException(RuntimeError):
+    pass

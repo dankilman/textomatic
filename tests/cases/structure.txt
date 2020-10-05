@@ -1,0 +1,301 @@
+---
+test empty list
+--
+1 2
+3 4
+--
+s:[]
+--
+[['1', '2'], ['3', '4']]
+
+---
+test empty tuple
+--
+1 2
+3 4
+--
+s:()
+--
+[('1', '2'), ('3', '4')]
+
+---
+test empty dict 1
+--
+a b
+1 2
+3 4
+--
+h;s:{}
+--
+[{'a': '1', 'b': '2'}, {'a': '3', 'b': '4'}]
+
+---
+test empty dict 2
+--
+a b
+1 2
+3 4
+--
+h;s:d()
+--
+[{'a': '1', 'b': '2'}, {'a': '3', 'b': '4'}]
+
+---
+test empty set
+--
+1 1 1
+2 2 2
+--
+s:s()
+--
+[{'1'}, {'2'}]
+
+---
+test list column selection
+--
+one two three four five six seven
+1 2 3 4 5 6 7
+--
+h;s:[2, -2, one, four, X:seven, Y:5, one, 1]
+--
+[['2', '6', '1', '4', '7', '5', '1', '1']]
+
+---
+test tuple column selection
+--
+one two three four five six seven
+1 2 3 4 5 6 7
+--
+h;s:(2, -2, one, four, X:seven, Y:5)
+--
+[('2', '6', '1', '4', '7', '5')]
+
+---
+test set column selection
+--
+one1 one2 one3 two1 two2 two3
+1 1 1 2 2 2
+--
+h;s:s(-1, two1)
+--
+[{'2'}]
+
+---
+test dict column selection 1
+--
+one two three four five six seven
+1 2 3 4 5 6 7
+--
+h;s:{2, -2, one, four, X:seven, Y:-3}
+--
+[{'two': '2', 'six': '6', 'one': '1', 'four': '4', 'X': '7', 'Y': '5'}]
+
+---
+test dict column selection 2
+--
+one two three four five six seven
+1 2 3 4 5 6 7
+--
+h;s:d(2, -2, one, four, X:seven, Y:-3)
+--
+[{'two': '2', 'six': '6', 'one': '1', 'four': '4', 'X': '7', 'Y': '5'}]
+
+---
+test nested structure
+--
+one two three four five six seven eight nine
+1 2 3 4 5 6 7 8 9
+--
+h;s:{k1:1,k2:{2,three},k3:[{four,5},d(-4,s7:seven)],eight,k4:(one, two, (four, five)),s:s(1,1,1)}
+--
+[{'k1': '1',
+  'k2': {'two': '2', 'three': '3'},
+  'k3': [{'four': '4', 'five': '5'}, {'six': '6', 's7': '7'}],
+  'eight': '8',
+  'k4': ('1', '2', ('4', '5')),
+  's': {'1'}}]
+
+---
+test nested path 1
+--
+obj
+{"l1": {"l2": {"level 3": "value"}}}
+--
+h;d:/;t:j;s:[1.l1.l2."level 3", obj.l1.l2.'level 3']
+--
+[['value', 'value']]
+
+---
+test nested path 2
+--
+obj
+{"l1": {"l2": [{}, {}, {"level 3": "val"}]}}
+--
+h;d:/;t:j;s:[-1.l1.l2.2."level 3", obj.l1.l2.-1.'level 3']
+--
+[['val', 'val']]
+
+---
+test nested path 3
+--
+a/obj
+1/{"l1": {"l2": [{}, {}, {"level 3.1": "val1", "level 3.2": "val2", "level 3.3": "val3"}]}}
+--
+h;d:/;t:,j;s:{aa: 2.l1.l2.2.'level 3.1', -1.l1.l2.2."level 3.1", obj.l1.l2.-1.'level 3.2', 2.l1.l2.2.'level 3.3'}
+--
+[{'aa': 'val1',
+  'obj.l1.l2.2.level 3.1': 'val1',
+  'obj.l1.l2.-1.level 3.2': 'val2',
+  'obj.l1.l2.2.level 3.3': 'val3'}]
+
+---
+test missing index field
+--
+1 2
+--
+s:[3]
+--
+ERROR
+
+---
+test optional index field
+--
+1 2 3
+1 2
+--
+s:[3?]
+--
+[['3'], [None]]
+
+---
+test missing name field
+--
+one two three
+1 2
+--
+h;s:[three]
+--
+ERROR
+
+---
+test optional name field
+--
+one two three
+1 2 3
+1 2
+--
+h;s:[three?]
+--
+[['3'], [None]]
+
+---
+test optional nested structure
+--
+{"l1": {"l2": {"l3": "value"}}}
+{"l1": {"l2": {}}}
+null
+--
+d:/;t:j;s:[1?.l1?.l2?.l3?]
+--
+[['value'], [None], [None]]
+
+---
+test partially optional nested structure
+--
+{"l1": {"l2": {"l3": [{},{},{"l4": "value"}]}}}
+{"l1": {"l2": {"l3": [{},{}]}}}
+--
+d:/;t:j;s:[1.l1.l2.l3.2?.l4]
+--
+[['value'], [None]]
+
+---
+test optional nested with key/value
+--
+{"l1": {"l2": {"l3": [{},{},{"l4": "value"}]}}}
+{"l1": {"l2": {"l3": [{},{}]}}}
+--
+d:/;t:j;s:{a:1.l1.l2?.l3.2?.l4}
+--
+[{'a': 'value'}, {'a': None}]
+
+---
+test global default value
+--
+{"l1": {"l2": {"l3": [{}, {"l4": "value1"}]}}}
+{"l1": {"l2": {"l3": [{}, {}]}}}
+{"l1": {"l2": {}}}
+{"l1": {}}
+{}
+--
+d:/;t:j;s:[1.l1.l2.l3.1.l4/"default-value"/]
+--
+[['value1'],
+ ['default-value'],
+ ['default-value'],
+ ['default-value'],
+ ['default-value']]
+
+---
+test default + named optional 1
+--
+{"l1": {"l2": {"l3": [{}, {"l4": "value1"}]}}}
+{"l1": {"l2": {}}}
+--
+d:/;t:j;s:[1.l1.l2.l3?.1.l4/'default-value'/]
+--
+[['value1'], ['default-value']]
+
+---
+test default + named optional 2
+--
+{"l1": {"l2": {}}}
+--
+d:/;t:j;s:[1.l1.l2.l3.1.l4?/'default-value'/]
+--
+ERROR
+
+---
+test default + indexed optional 2
+--
+{"l1": {"l2": []}}
+--
+d:/;t:j;s:[1.l1.l2.1?/'default-value'/]
+--
+[['default-value']]
+
+---
+test defaults with various characters 1
+--
+{}
+--
+d:/;t:j;s:[1.key/':\\"{[(.?'/, 1.key/':\\"{[(.?'/]
+--
+[[':\\"{[(.?', ':\\"{[(.?']]
+
+---
+test defaults with various characters 2
+--
+{}
+--
+d:/;t:j;s:{a:1.key/':\\"{[(.?'/, b:1.key/':\\",{}[]().?'/}
+--
+[{'a': ':\\"{[(.?', 'b': ':\\",{}[]().?'}]
+
+---
+test defaults with various characters 3
+--
+{}
+--
+d:/;t:j;s:(1.key/':\\"{[(.?'/, 1.key/':\\"{[(.?'/)
+--
+[(':\\"{[(.?', ':\\"{[(.?')]
+
+---
+test compound default literal
+--
+1
+--
+s:[2/[{"foo": "bar"}]/]
+--
+[[[{'foo': 'bar'}]]]

@@ -1,0 +1,91 @@
+---
+test defaults
+--
+name,age
+foo,13
+bar,14
+--
+--
+[['name', 'age'], ['foo', '13'], ['bar', '14']]
+---
+test defaults header
+--
+name,age
+foo,13
+bar,14
+--
+h
+--
+[['foo', '13'], ['bar', '14']]
+---
+test defaults delimiter
+--
+a,b;c
+e;f,h
+--
+d:,
+--
+[['a', 'b;c'], ['e;f', 'h']]
+---
+test cmd separator
+--
+a,b,c
+d,e,f
+--
+d:+;h
+--
+[['d,e,f']]
+---
+test custom cmd separator (with prefix whitespace)
+--
+a;b,c
+d,e;f
+--
+  :/d:;/h
+--
+[['d,e', 'f']]
+---
+test prefix : ignored
+--
+--
+:
+--
+[]
+---
+test empty cmd part ignored
+--
+--
+:::
+--
+[]
+---
+test empty cmd part ignored
+--
+one two
+--
+s:;t:;d:;i:;o:
+--
+[['one', 'two']]
+---
+test python literal delimiter
+--
+oneātwo
+--
+d:\u0101
+--
+[['one', 'two']]
+---
+test whitespace in cmd parts
+--
+one,two-three
+--
+          d       :       -
+--
+[['one,two', 'three']]
+---
+test unsupported cmd type
+--
+--
+XX:YY
+--
+ERROR

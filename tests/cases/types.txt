@@ -1,0 +1,279 @@
+---
+test string and number types
+--
+one,two,1,3,4.4
+--
+t:s,_,i,f,f
+--
+[['one', 'two', 1, 3.0, 4.4]]
+
+---
+test bool types
+--
+true,yes,y,on,1,not-true
+--
+t:b,b,b,b,b,b
+--
+[[True, True, True, True, True, False]]
+
+---
+test compound types
+--
+{"one": 1},{'two': 2}
+--
+d:,;t:j,l
+--
+[[{'one': 1}, {'two': 2}]]
+
+---
+test default type
+--
+1,one,2
+--
+t:i,,i
+--
+[[1, 'one', 2]]
+
+---
+test indexed type def
+--
+1.0,one,2
+--
+t:3:i,1:f
+--
+[[1.0, 'one', 2]]
+
+---
+test named type def
+--
+a,b,c
+2.0,two,3
+--
+h;t:c:i,a:f
+--
+[[2.0, 'two', 3]]
+
+---
+test quoted named type def
+--
+the first,the second,the third
+2.0,two,3
+--
+h;t:"the third":i,'the first':f
+--
+[[2.0, 'two', 3]]
+
+---
+test mixed indexed and named type def
+--
+a,b,c
+3,three,4.0
+--
+h;t:3:f,a:i
+--
+[[3, 'three', 4.0]]
+
+---
+test partial positional 1
+--
+1,2,3,4
+--
+t:i,,i
+--
+[[1, '2', 3, '4']]
+
+---
+test partial positional 2
+--
+1,2,3,4
+--
+t:,i
+--
+[['1', 2, '3', '4']]
+
+---
+test positional indexed and named type defs
+--
+a,b,c,d,e,f,g
+1,2,3,4,5,6,7
+--
+h;t:i,d:i,-1:i
+--
+[[1, '2', '3', 4, '5', '6', 7]]
+
+---
+test invalid positional type def after named
+--
+a,b,c
+1,2,3
+--
+t:b:i,s
+--
+ERROR
+
+---
+test invalid positional type def after indexed
+--
+1,2,3
+--
+t:2:i,s
+--
+ERROR
+
+---
+test unsupported type
+--
+a
+--
+t:X
+--
+ERROR
+---
+
+test missing positional type
+--
+1 2
+--
+t:,,i
+--
+ERROR
+
+---
+test missing indexed type key
+--
+1 2
+--
+t:3:i
+--
+ERROR
+
+---
+test missing indexed type value
+--
+1 2 what
+--
+t:3:i
+--
+ERROR
+
+---
+test missing named type key
+--
+one two three
+1 2
+--
+h;t:three:i
+--
+ERROR
+
+---
+test missing named type value
+--
+one two three
+1 2 value
+--
+h;t:three:i
+--
+ERROR
+
+---
+test optional positional type
+--
+1 2 3
+1 2
+1 2 what
+--
+t:,,i?
+--
+[['1', '2', 3], ['1', '2'], ['1', '2', None]]
+
+---
+test optional indexed type key
+--
+1 2 3
+1 2
+--
+t:3?:i
+--
+[['1', '2', 3], ['1', '2']]
+
+---
+test optional indexed type value
+--
+1 2 3
+1 2 what
+--
+t:3:i?
+--
+[['1', '2', 3], ['1', '2', None]]
+
+---
+test missing named type key
+--
+one two three
+1 2 3
+1 2
+--
+h;t:three?:i
+--
+[['1', '2', 3], ['1', '2']]
+
+---
+test missing named type value
+--
+one two three
+1 2 3
+1 2 what
+--
+h;t:three:i?
+--
+[['1', '2', 3], ['1', '2', None]]
+
+---
+test global default value
+--
+one two three
+nope1 nope2 nope3
+1 2
+--
+h;t:i/1/,two:i/2/,-1:i/3.0/
+--
+[[1, 2, 3.0], [1, 2]]
+
+---
+test optional + default value
+--
+one two three
+nope1 nope2 nope3
+1 2
+--
+h;t:i?/1/,two:i?/2/,-1?:i?/3/
+--
+[[1, 2, 3], [1, 2]]
+
+---
+test default value with non optional 1
+--
+1 2 nope
+--
+t:3?:i/3/
+--
+ERROR
+
+---
+test default value with non optional 2
+--
+1 2
+--
+t:3:i?/3/
+--
+ERROR
+
+---
+test invalid default value
+--
+1
+--
+t:i/nope/
+--
+ERROR

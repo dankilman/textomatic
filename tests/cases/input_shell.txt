@@ -1,0 +1,38 @@
+---
+test shell input basic
+--
+drwxr-xr-x  3 foo bar    96 Sep 28 03:03 notes
+drwxr-xr-x  7 foo bar   224 Oct  5 01:25 tests
+--
+i:sh
+--
+[['drwxr-xr-x', '3', 'foo', 'bar', '96', 'Sep', '28', '03:03', 'notes'],
+ ['drwxr-xr-x', '7', 'foo', 'bar', '224', 'Oct', '5', '01:25', 'tests']]
+
+---
+test with header
+--
+perms       p u   g     s   mon d  time  file
+drwxr-xr-x  3 foo bar    96 Sep 28 03:03 notes
+drwxr-xr-x  7 foo bar   224 Oct  5 01:25 tests
+--
+i:sh;s:{perms,user:u,file};h
+--
+[{'perms': 'drwxr-xr-x', 'user': 'foo', 'file': 'notes'},
+ {'perms': 'drwxr-xr-x', 'user': 'foo', 'file': 'tests'}]
+
+---
+test empty lines
+--
+perms       p u   g     s   mon d  time  file
+
+
+drwxr-xr-x  3 foo bar    96 Sep 28 03:03 notes
+
+
+drwxr-xr-x  7 foo bar   224 Oct  5 01:25 tests
+--
+i:sh;s:{perms,user:u,file};h
+--
+[{'perms': 'drwxr-xr-x', 'user': 'foo', 'file': 'notes'},
+ {'perms': 'drwxr-xr-x', 'user': 'foo', 'file': 'tests'}]

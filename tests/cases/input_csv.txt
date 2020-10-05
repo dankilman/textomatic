@@ -1,0 +1,42 @@
+---
+test csv basic
+--
+one two three
+1 2 3
+--
+i:c
+--
+[['one', 'two', 'three'], ['1', '2', '3']]
+
+---
+test csv header
+--
+one two three
+1 2 3
+--
+i:c;h;s:[two,three,one]
+--
+[['2', '3', '1']]
+
+---
+test csv delimiter
+--
+1|2,3,4|5,6
+--
+i:c;d:,
+--
+[['1|2', '3', '4|5', '6']]
+
+---
+test ignore empty lines
+--
+1 2 3
+
+
+4 5 6
+
+
+7 8 9
+--
+--
+[['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]

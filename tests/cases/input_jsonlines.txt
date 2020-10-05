@@ -1,0 +1,141 @@
+---
+test jsonlines basic
+--
+{"one": 1, "two": 2, "three": 3}
+{"one": 11, "two": 22, "three": 33}
+--
+i:jl
+--
+[[1, 2, 3], [11, 22, 33]]
+
+---
+test missing values are None (no structure)
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl
+--
+[[1, None, None], [None, 2, None], [None, None, 3]]
+
+---
+test missing values are None s:[]
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl;s:[]
+--
+[[1, None, None], [None, 2, None], [None, None, 3]]
+
+---
+test missing values are None s:()
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl;s:()
+--
+[(1, None, None), (None, 2, None), (None, None, 3)]
+
+---
+test missing values are None s:s()
+--
+{"one": 1}
+{}
+--
+i:jl;s:s()
+--
+[{1}, {None}]
+
+---
+test missing values are None s:{}
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl;s:{}
+--
+[{'one': 1, 'two': None, 'three': None},
+ {'one': None, 'two': 2, 'three': None},
+ {'one': None, 'two': None, 'three': 3}]
+
+---
+test missing values are None with selected named headers
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl;s:[three?,two?,one?]
+--
+[[None, None, 1], [None, 2, None], [3, None, None]]
+
+---
+test missing values are None with selected indexed headers
+--
+{"one": 1}
+{"two": 2}
+{"three": 3}
+--
+i:jl;s:[3?,2?,1?]
+--
+[[None, None, 1], [None, 2, None], [3, None, None]]
+
+---
+test default of missing
+--
+{"one": 1}
+{}
+--
+i:jl;s:[1/11/]
+--
+[[1], [11]]
+
+---
+test missing error
+--
+{"one": 1}
+{}
+--
+i:jl;s:[1]
+--
+ERROR
+
+---
+test missing in type definitions with default
+--
+{"one": 1}
+{}
+--
+i:jl;t:f/2.0/
+--
+[[1.0], [2.0]]
+
+---
+test missing in type definitions without default
+--
+{"one": 1}
+{}
+--
+i:jl;t:f
+--
+ERROR
+
+---
+test empty lines
+--
+{"one": 1}
+
+
+{"one": 1}
+
+{"one": 2}
+--
+i:jl
+--
+[[1], [1], [2]]

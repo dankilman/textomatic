@@ -1,0 +1,182 @@
+---
+test python literal output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:l
+--
+[['1', '2', '3'], ['4', '5', '6']]
+
+---
+test json output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:j
+--
+[
+    [
+        "1",
+        "2",
+        "3"
+    ],
+    [
+        "4",
+        "5",
+        "6"
+    ]
+]
+
+---
+test json lines output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:jl
+--
+["1", "2", "3"]
+["4", "5", "6"]
+
+---
+test csv output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:c
+--
+"one","two","three"
+"1","2","3"
+"4","5","6"
+
+---
+test table output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:t
+--
+╒═══════╤═══════╤═════════╕
+│   one │   two │   three │
+╞═══════╪═══════╪═════════╡
+│     1 │     2 │       3 │
+├───────┼───────┼─────────┤
+│     4 │     5 │       6 │
+╘═══════╧═══════╧═════════╛
+
+---
+test html output basic
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:h
+--
+<table>
+<thead>
+<tr><th style="text-align: right;">  one</th><th style="text-align: right;">  two</th><th style="text-align: right;">  three</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: right;">    1</td><td style="text-align: right;">    2</td><td style="text-align: right;">      3</td></tr>
+<tr><td style="text-align: right;">    4</td><td style="text-align: right;">    5</td><td style="text-align: right;">      6</td></tr>
+</tbody>
+</table>
+
+---
+test csv output indexed headers
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:c;s:[1,-1]
+--
+"one","three"
+"1","3"
+"4","6"
+
+---
+test csv output named headers
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:c;s:[one,three]
+--
+"one","three"
+"1","3"
+"4","6"
+
+---
+test csv output custom headers
+--
+one two three four
+1 2 3 4
+4 5 6 7
+--
+h;o:c;s:[o:one,t:-2,f:4]
+--
+"o","t","f"
+"1","3","4"
+"4","6","7"
+
+---
+test csv output nested path header
+--
+{"l1": {"l2": {"l3": [{}, {}, {"l4": "value"}]}}}
+--
+o:c;i:jl;s:[l1.l2.l3.2.l4]
+--
+"l1.l2.l3.2.l4"
+"value"
+
+---
+test csv no header
+--
+1 2
+3 4
+--
+o:c
+--
+"1","2"
+"3","4"
+
+---
+test table no header
+--
+1 2
+3 4
+--
+o:t
+--
+╒═══╤═══╕
+│ 1 │ 2 │
+├───┼───┤
+│ 3 │ 4 │
+╘═══╧═══╛
+
+---
+test html no header
+--
+1 2
+3 4
+--
+o:h
+--
+<table>
+<tbody>
+<tr><td style="text-align: right;">1</td><td style="text-align: right;">2</td></tr>
+<tr><td style="text-align: right;">3</td><td style="text-align: right;">4</td></tr>
+</tbody>
+</table>

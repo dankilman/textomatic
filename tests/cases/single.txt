@@ -1,0 +1,12 @@
+---
+test csv output custom headers
+--
+one two three
+1 2 3
+4 5 6
+--
+h;o:c;s:[one,three]
+--
+"one","three"
+"1","3"
+"4","6"
