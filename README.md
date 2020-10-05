@@ -1,6 +1,7 @@
 # textomatic
 Scratchpad for tabular data transformations
 
+![Screencast Demo](https://i.ibb.co/bL9MJkm/demo.gif)
 
 ## Installation
 ```shell script
