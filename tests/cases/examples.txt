@@ -1,0 +1,51 @@
+---
+Parsing `ps aux` output
+--
+USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+dan              63507   6.3  0.4  6178180 128396   ??  S     8:34PM   0:04.18 /Applications/iTerm.app/Contents/MacOS/iTerm2
+_windowserver      250   4.4  0.3 12494684  86460   ??  Ss    6Sep20 1173:05.08 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+dan              54987   3.8 12.8 16080596 4290128   ??  S    27Sep20 744:52.21 /Users/dan/Library/Application Support/JetBrains/Toolbox/apps/PyCharm-P/ch-0/202.7319.64/PyCharm.app/Contents/MacOS/pycharm
+_hidd              184   2.0  0.0  5608224   7416   ??  Ss    6Sep20 182:45.73 /usr/libexec/hidd
+--
+h;i:sh;s:{user:USER,pid:PID};o:jl;t:PID:i
+--
+--
+Pipeing content from shell using `ps aux | tm` and transforming it into json lines where
+each line containes the `USER` and `PID` columns with lower cased keys.
+`PID` is casted into an integer.
+
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `i:sh` says the `INPUT` should be parsed like shell output
+* `s:{user:USER,pid:PID}` specifies the output structure
+* `o:jl` specifies the output format to be json lines
+* `t:PID:i` specifies the `PID` column shouldd ge parsed as integer
+
+---
+Pretty printing csv input
+--
+Name,Age,City
+James Joe,34,NYC
+John Doe,25,London
+--
+h;o:t
+--
+--
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `o:t` specifies the output format to be a pretty printed table
+
+---
+Correcting bad input
+--
+Name,Age,City
+James Joe,34,NYC
+John Doe,Not a number,London
+Jane Row,24,Tel Aviv
+--
+h;t:Age:i/76/
+--
+--
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `t:Age:i/76/` provides a default value when the `Age` column cannot be parsed as integer

@@ -44,6 +44,109 @@ current `OUTPUT` into standard out.
 
 Use `CTRL-P` to put the current `OUTPUT` in the system clipboard.
 
+## Examples
+
+### Parsing `ps aux` output
+Pipeing content from shell using `ps aux | tm` and transforming it into json lines where
+each line containes the `USER` and `PID` columns with lower cased keys.
+`PID` is casted into an integer.
+
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `i:sh` says the `INPUT` should be parsed like shell output
+* `s:{user:USER,pid:PID}` specifies the output structure
+* `o:jl` specifies the output format to be json lines
+* `t:PID:i` specifies the `PID` column shouldd ge parsed as integer
+```
+INPUT                                  │OUTPUT                                  
+USER               PID  %CPU %MEM      │{"user": "dan", "pid": 63507}           
+dan              63507   6.3  0.4  6178│{"user": "_windowserver", "pid": 250}   
+_windowserver      250   4.4  0.3 12494│{"user": "dan", "pid": 54987}           
+dan              54987   3.8 12.8 16080│{"user": "_hidd", "pid": 184}           
+_hidd              184   2.0  0.0  5608│                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+vi-insert|COMMAND|live|in:sh|out:jl|delim:auto|header:true                      
+> h;i:sh;s:{user:USER,pid:PID};o:jl;t:PID:i                                     
+```
+
+### Pretty printing csv
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `o:t` specifies the output format to be a pretty printed table
+```
+INPUT                                  │OUTPUT                                  
+Name,Age,City                          │╒═══════════╤═══════╤════════╕          
+James Joe,34,NYC                       ││ Name      │   Age │ City   │          
+John Doe,25,London                     │╞═══════════╪═══════╪════════╡          
+                                       ││ James Joe │    34 │ NYC    │          
+                                       │├───────────┼───────┼────────┤          
+                                       ││ John Doe  │    25 │ London │          
+                                       │╘═══════════╧═══════╧════════╛          
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+vi-insert|COMMAND|live|in:c|out:t|delim:auto|header:true                        
+> h;o:t                                                                         
+```
+
+### Correcting bad input
+`COMMAND`:
+* `h` says `INPUT` includes a header
+* `t:Age:i/76/` provides a default value when the `Age` column cannot be parsed as integer
+```
+INPUT                                  │OUTPUT                                  
+Name,Age,City                          │[['James Joe', 34, 'NYC'],              
+James Joe,34,NYC                       │ ['John Doe', 76, 'London'],            
+John Doe,Not a number,London           │ ['Jane Row', 24, 'Tel Aviv']]          
+Jane Row,24,Tel Aviv                   │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+vi-insert|COMMAND|live|in:c|out:l|delim:auto|header:true                        
+> h;t:Age:i/76/                                                                 
+```
+
+
 ## Usage
 `textomatic` is split into 3 parts:
 * `INPUT`: The input data that is to be transformed

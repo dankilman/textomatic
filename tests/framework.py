@@ -14,6 +14,7 @@ class Case:
     input_text: str
     cmd: str
     expected_output: str
+    description = None
     skipped = False
     process_ctx = ProcessContext()
 
@@ -25,9 +26,13 @@ def load_cases(name):
     parsed_cases = []
     for case in cases:
         case_parts = case.split("--")
-        assert len(case_parts) == 4
+        assert len(case_parts) in {4, 5}
         case_parts = [c.strip() for c in case_parts]
+        description = None
+        if len(case_parts) == 5:
+            case_parts, description = case_parts[:4], case_parts[-1]
         case = Case(*case_parts)
+        case.description = description
         if case.name.startswith("#"):
             case.skipped = True
         parsed_cases.append(case)
