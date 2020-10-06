@@ -1,6 +1,10 @@
 # textomatic
 Scratchpad for tabular data transformations
 
+Given input of some tabular data (AKA `INPUT`), 
+and a command (AKA `COMMAND`), transform that input 
+into some other output (AKA `OUTPUT`).
+
 ![Screencast Demo](https://i.ibb.co/bL9MJkm/demo.gif)
 
 ## Installation
@@ -28,7 +32,7 @@ You can also pipe content from stdin:
 $ ls | tm
 ```
 
-To see what arguments/options are available run:
+To see what arguments/options are available, run:
 ```
 $ tm --help
 ```
@@ -41,12 +45,14 @@ current `OUTPUT` into standard out.
 Use `CTRL-P` to put the current `OUTPUT` in the system clipboard.
 
 ## Usage
-`teximator` is split into 3 parts:
+`textomatic` is split into 3 parts:
 * `INPUT`: The input data that is to be transformed
 * `OUTPUT`: The result of applying the `COMMAND` on `INPUT`
 * `COMMAND`: The transformation logic using a succinct expression language described below
     
 Use the `Tab` key to move between them.
+
+`INPUT` and `COMMAND` are edited using `vim` bindings.
 
 ### `COMMAND` Expression Language
 `COMMAND` is composed of different parts separated by `;`, e.g.
@@ -96,7 +102,7 @@ Used to specify the input format. Currently these are the available inputs:
 
 ##### The `o` expression (output)
 Used to specify the output format. Currently these are the available outputs:
-* `l` (python literal)
+* `l` (python literal, this is the default)
 * `j` (json)
 * `jl` (jsonlines)
 * `c` (csv)
@@ -111,7 +117,7 @@ The types are:
 * `s` (string, the default)
 * `f` (float)
 * `i` (integer)
-* `b` (boolean, case invariant `true/yes/y/on/1` will be parsed as `true`)
+* `b` (boolean, case insensitive `true/yes/y/on/1` will be parsed as `true`)
 * `j` (json, will JSON parse the column)
 * `l` (literal, will parse a python literal using `ast.literal_eval`)
 
@@ -120,8 +126,8 @@ Using positional syntax:
 > t:i,i,b
 ```
 In the above:
-* the first 2 columns should be parsed as integers
-* the third column should be parsed as boolean
+* the first 2 columns will be parsed as integers
+* the third column will be parsed as boolean
 * the rest will be strings
 
 Using indexed syntax:
@@ -130,7 +136,7 @@ Using indexed syntax:
 ```
 In the above:
 * the first column will be parsed as integer
-* the third column should be parsed as float
+* the third column will be parsed as float
 * the rest will be strings
 
 Using named syntax:
