@@ -212,7 +212,7 @@ class ToggledLexer(DynamicLexer):
             if not self.enabled:
                 return None
             process_ctx = context.get_process()
-            lexer_cls = module.get_lexer(process_ctx.processed_command)
+            lexer_cls = module.get(process_ctx.processed_command, safe=True).lexer
             return PygmentsLexer(lexer_cls)
 
         super().__init__(get_lexer)

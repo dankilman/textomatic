@@ -74,21 +74,12 @@ class ShellInput(Input):
         return rows, header_line
 
 
-def get_lexer(processed_cmd: ProcessedCommand) -> Lexer:
-    try:
-        return _get_input(processed_cmd).lexer
-    except ProcessException:
-        return DEFAULT_LEXER
-
-
-def get_rows(text, processed_cmd: ProcessedCommand):
-    return _get_input(processed_cmd).get_rows(text, processed_cmd)
-
-
-def _get_input(processed_cmd: ProcessedCommand):
+def get(processed_cmd: ProcessedCommand, safe=False):
     try:
         return inputs[processed_cmd.input]
     except KeyError:
+        if safe:
+            return inputs["c"]
         raise ProcessException(f"Unregistered input: {processed_cmd.input}")
 
 

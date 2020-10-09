@@ -34,12 +34,14 @@ def getsafe(attr, default=None):
 
 def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     processed_cmd, changed = _process_cmd(ctx, cmd)
+    input_obj = inputs.get(processed_cmd)
+    output_obj = outputs.get(processed_cmd)
 
     if trigger == "cmd" and not changed:
         return None
 
     if trigger != "cmd" or any(attr in changed for attr in ["delimiter", "input", "has_header"]):
-        rows, headers_list = inputs.get_rows(text, processed_cmd)
+        rows, headers_list = input_obj.get_rows(text, processed_cmd)
         headers = {i: h for i, h in enumerate(headers_list)}
         ctx.processed_input = ProcessedInput(rows, headers)
         if headers:
@@ -50,7 +52,7 @@ def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     rows = _process_rows(processed_cmd, headers, rows)
     processed_cmd.headers = _extract_output_headers(processed_cmd.structure, headers)
 
-    return outputs.create_output(rows, processed_cmd)
+    return output_obj.create_output(rows, processed_cmd)
 
 
 def _extract_output_headers(structure: parser.StructureData, input_headers):

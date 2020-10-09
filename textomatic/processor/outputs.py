@@ -92,21 +92,12 @@ class HTMLOutput(Output):
         return tabulate(rows, tablefmt="html", **kwargs)
 
 
-def get_lexer(processed_cmd: ProcessedCommand) -> Lexer:
-    try:
-        return _get_output(processed_cmd).lexer
-    except ProcessException:
-        return DEFAULT_LEXER
-
-
-def create_output(rows, processed_cmd: ProcessedCommand) -> str:
-    return _get_output(processed_cmd).create_output(rows, processed_cmd)
-
-
-def _get_output(processed_cmd: ProcessedCommand) -> Output:
+def get(processed_cmd: ProcessedCommand, safe=False) -> Output:
     try:
         return outputs[processed_cmd.output]
     except KeyError:
+        if safe:
+            return outputs["l"]
         raise ProcessException(f"Unregistered output: {processed_cmd.output}")
 
 
