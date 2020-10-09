@@ -34,8 +34,8 @@ def getsafe(attr, default=None):
 
 def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     processed_cmd, changed = _process_cmd(ctx, cmd)
-    input_obj = inputs.get(processed_cmd)
-    output_obj = outputs.get(processed_cmd)
+    input_obj = inputs.registry.get(processed_cmd)
+    output_obj = outputs.registry.get(processed_cmd)
 
     if trigger == "cmd" and not changed:
         return None
@@ -329,9 +329,15 @@ def _process_cmd(ctx, cmd) -> ProcessedCommand:
             else:
                 result.structure = DEFAULT_CMD.structure
         elif expression_type == "i":
-            result.input = expression_body or DEFAULT_CMD.input
+            if expression_body:
+                result.input = parser.parse_processor(expression_body)
+            else:
+                result.input = DEFAULT_CMD.input
         elif expression_type == "o":
-            result.output = expression_body or DEFAULT_CMD.output
+            if expression_body:
+                result.output = parser.parse_processor(expression_body)
+            else:
+                result.output = DEFAULT_CMD.output
         else:
             raise ProcessException("Unexpected")
 

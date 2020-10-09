@@ -1,6 +1,10 @@
+from dataclasses import dataclass
 from pprint import pprint
+from typing import List, Callable
 
-from textomatic.processor.parser import parse_structure, parse_types
+import pytest
+
+from textomatic.processor.parser import parse_structure, parse_types, ParseData, parse_processor
 
 types_tests = [
     ",f,",
@@ -42,15 +46,35 @@ structure_tests = [
 ]
 
 
-def test_parser_sanity():
-    tests = [
-        (structure_tests, parse_structure),
-        (types_tests, parse_types),
-    ]
-    for test_group, fn in tests:
-        print(f"@@@@@@ {fn.__name__} @@@@@@")
-        for test in test_group:
-            print(f"## expr: {test}")
-            result = fn(test)
-            pprint(result)
-        print()
+processor_tests = [
+    "i",
+    "i()",
+    "i(one, two, three)",
+    "ii",
+    "ii()",
+    "ii(one, two, three)",
+]
+
+
+@dataclass
+class Case:
+    name: str
+    test_group: List[str]
+    fn: Callable
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        Case("structure", structure_tests, parse_structure),
+        Case("types", types_tests, parse_types),
+        Case("processor", processor_tests, parse_processor),
+    ],
+    ids=lambda case, *_: case.name,
+)
+def test_parser(case: Case):
+    print()
+    for test in case.test_group:
+        print(f"## expr: {test}")
+        result = case.fn(test)
+        pprint(result)

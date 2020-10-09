@@ -14,6 +14,7 @@ from pyparsing import (
     QuotedString,
     Suppress,
     Forward,
+    alphanums,
 )
 
 from textomatic.exceptions import ProcessException
@@ -61,9 +62,16 @@ class IdData(ParseData):
     optional: bool = False
 
 
+@dataclass
+class ProcessorData(ParseData):
+    alias: str
+    args: str
+
+
 # general
 OptionalMarker = Optional("?")("optional")
 PrintablesReducedForDefault = Word(string.printable, excludeChars="/")
+PrintablesReducedForArgs = Word(string.printable, excludeChars=")")
 Default = Optional(Combine(Suppress("/") + PrintablesReducedForDefault + Suppress("/")))("default")
 
 # ref
@@ -103,6 +111,13 @@ EmptyStructure = Literal("[]") | "{}" | "()" | "d()" | "s()"
 EmptyStructure.setParseAction(lambda t: [StructureData(t[0], [])])
 TopLevelStructure = EmptyStructure | Structure
 
+# processor (inputs/outputs)
+ProcessorArgsInner = Optional(PrintablesReducedForArgs)
+ProcessorArgs = (Suppress("(") + ProcessorArgsInner + Suppress(")"))("args")
+ProcessorAlias = Word(alphanums)("alias")
+Processor = ProcessorAlias + Optional(ProcessorArgs)
+Processor.setParseAction(lambda t: [ProcessorData(t.alias, (t.args or [""])[0])])
+
 
 # api
 def parse_types(expr) -> List[Union[KeyToValueData, TypeDefData]]:
@@ -111,6 +126,10 @@ def parse_types(expr) -> List[Union[KeyToValueData, TypeDefData]]:
 
 def parse_structure(expr) -> StructureData:
     return _parse(TopLevelStructure, expr)
+
+
+def parse_processor(expr) -> ProcessorData:
+    return _parse(Processor, expr)
 
 
 # internal

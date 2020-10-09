@@ -28,6 +28,7 @@ from textomatic.app.keys import kb, cmd_kb
 from textomatic.processor.process import process
 from textomatic.app.style import application_style
 from textomatic.app.widgets import textbox
+from textomatic.processor.registry import Registry
 from textomatic.text import as_printable
 
 
@@ -37,8 +38,8 @@ class AppBuilder:
         self.process_ctx = context.get_process()
         self.ctx.process_fn = self.process_key
         self.lexer_threshold = 10000
-        self.output_lexer = ToggledLexer(outputs)
-        self.input_lexer = ToggledLexer(inputs)
+        self.output_lexer = ToggledLexer(outputs.registry)
+        self.input_lexer = ToggledLexer(inputs.registry)
 
     def create_app(self):
         ctx = self.ctx
@@ -204,15 +205,15 @@ class AppBuilder:
 
 
 class ToggledLexer(DynamicLexer):
-    def __init__(self, module):
+    def __init__(self, registry: Registry):
         self.enabled = True
-        self.module = module
+        self.registry = registry
 
         def get_lexer():
             if not self.enabled:
                 return None
             process_ctx = context.get_process()
-            lexer_cls = module.get(process_ctx.processed_command, safe=True).lexer
+            lexer_cls = self.registry.get(process_ctx.processed_command, safe=True).lexer
             return PygmentsLexer(lexer_cls)
 
         super().__init__(get_lexer)

@@ -1,12 +1,13 @@
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class ProcessedCommand:
     cmd: str
     delimiter: str = None
-    output: str = "l"
-    input: str = "c"
+    output: Any = None
+    input: Any = None
     structure: object = None
     types: object = None
     has_header: bool = False

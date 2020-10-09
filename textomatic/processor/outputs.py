@@ -11,6 +11,7 @@ from pygments.lexers.python import PythonLexer
 
 from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand
+from textomatic.processor.registry import Registry
 
 DEFAULT_LEXER = PythonLexer
 
@@ -92,24 +93,16 @@ class HTMLOutput(Output):
         return tabulate(rows, tablefmt="html", **kwargs)
 
 
-def get(processed_cmd: ProcessedCommand, safe=False) -> Output:
-    try:
-        return outputs[processed_cmd.output]
-    except KeyError:
-        if safe:
-            return outputs["l"]
-        raise ProcessException(f"Unregistered output: {processed_cmd.output}")
-
-
-outputs = {
-    "l": PythonLiteralOutput(),
-    "j": JsonOutput(),
-    "jl": JsonLinesOutput(),
-    "c": CSVOutput(),
-    "t": TableOutput(),
-    "h": HTMLOutput(),
-}
-
-
-def register(alias, output_object):
-    outputs[alias] = output_object
+registry = Registry(
+    attr="output",
+    tpe=Output,
+    default_alias="l",
+    data={
+        "l": PythonLiteralOutput(),
+        "j": JsonOutput(),
+        "jl": JsonLinesOutput(),
+        "c": CSVOutput(),
+        "t": TableOutput(),
+        "h": HTMLOutput(),
+    },
+)

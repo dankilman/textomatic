@@ -3,13 +3,13 @@ import shlex
 from typing import List, Any, Mapping
 
 import clevercsv
-from pygments.lexer import Lexer
 from pygments.lexers.data import JsonLexer
 from pygments.lexers.python import PythonLexer
 from pygments.lexers.special import TextLexer
 
 from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand, MISSING
+from textomatic.processor.registry import Registry
 
 DEFAULT_LEXER = PythonLexer
 
@@ -74,21 +74,13 @@ class ShellInput(Input):
         return rows, header_line
 
 
-def get(processed_cmd: ProcessedCommand, safe=False):
-    try:
-        return inputs[processed_cmd.input]
-    except KeyError:
-        if safe:
-            return inputs["c"]
-        raise ProcessException(f"Unregistered input: {processed_cmd.input}")
-
-
-inputs = {
-    "c": CSVInput(),
-    "jl": JsonLinesInput(),
-    "sh": ShellInput(),
-}
-
-
-def register(alias, input_object):
-    inputs[alias] = input_object
+registry = Registry(
+    attr="input",
+    tpe=Input,
+    default_alias="c",
+    data={
+        "c": CSVInput(),
+        "jl": JsonLinesInput(),
+        "sh": ShellInput(),
+    },
+)
