@@ -38,8 +38,8 @@ class AppBuilder:
         self.process_ctx = context.get_process()
         self.ctx.process_fn = self.process_key
         self.lexer_threshold = 10000
-        self.output_lexer = ToggledLexer(outputs.registry)
-        self.input_lexer = ToggledLexer(inputs.registry)
+        self.input_lexer = ToggledLexer(inputs.registry, take_last=False)
+        self.output_lexer = ToggledLexer(outputs.registry, take_last=True)
 
     def create_app(self):
         ctx = self.ctx
@@ -132,8 +132,8 @@ class AppBuilder:
                 if ctx.copied_to_clipboard:
                     result.append(" [Copied output to clipboard]")
             return HTML("".join(result)).format(
-                input=cmd.input,
-                output=cmd.output,
+                input=cmd.inputs[0].alias if cmd.inputs else "c",
+                output=cmd.outputs[0].alias if cmd.outputs else "l",
                 delimiter=as_printable(cmd.delimiter) or "auto",
                 current_error=str(ctx.current_error),
             )
@@ -205,7 +205,7 @@ class AppBuilder:
 
 
 class ToggledLexer(DynamicLexer):
-    def __init__(self, registry: Registry):
+    def __init__(self, registry: Registry, take_last):
         self.enabled = True
         self.registry = registry
 
@@ -213,8 +213,9 @@ class ToggledLexer(DynamicLexer):
             if not self.enabled:
                 return None
             process_ctx = context.get_process()
-            lexer_cls = self.registry.get(process_ctx.processed_command, safe=True).lexer
-            return PygmentsLexer(lexer_cls)
+            processors = self.registry.get(process_ctx.processed_command, safe=True)
+            processor = processors[-1] if take_last else processors[0]
+            return PygmentsLexer(processor.lexer)
 
         super().__init__(get_lexer)
 

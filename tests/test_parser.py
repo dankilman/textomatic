@@ -4,7 +4,7 @@ from typing import List, Callable
 
 import pytest
 
-from textomatic.processor.parser import parse_structure, parse_types, ParseData, parse_processor
+from textomatic.processor.parser import parse_structure, parse_types, parse_processors
 
 types_tests = [
     ",f,",
@@ -48,11 +48,12 @@ structure_tests = [
 
 processor_tests = [
     "i",
-    "i()",
-    "i(one, two, three)",
+    "i``",
+    "i`one, two, three`",
     "ii",
-    "ii()",
-    "ii(one, two, three)",
+    "ii``",
+    "ii`one, two, three`",
+    "i1,i1`one, two, three`, i2, i2`one, two, three`",
 ]
 
 
@@ -68,7 +69,7 @@ class Case:
     [
         Case("structure", structure_tests, parse_structure),
         Case("types", types_tests, parse_types),
-        Case("processor", processor_tests, parse_processor),
+        Case("processors", processor_tests, parse_processors),
     ],
     ids=lambda case, *_: case.name,
 )

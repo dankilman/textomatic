@@ -1,12 +1,8 @@
 ---
-test csv output custom headers
+test csv output
 --
-one two three
-1 2 3
-4 5 6
+1 2
 --
-h;o:c;s:[one,three]
+o:c
 --
-"one","three"
-"1","3"
-"4","6"
+"1","2"

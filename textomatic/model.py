@@ -1,13 +1,13 @@
-from dataclasses import dataclass
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, List
 
 
 @dataclass
 class ProcessedCommand:
     cmd: str
     delimiter: str = None
-    output: Any = None
-    input: Any = None
+    outputs: List[Any] = field(default_factory=list)
+    inputs: List[Any] = field(default_factory=list)
     structure: object = None
     types: object = None
     has_header: bool = False

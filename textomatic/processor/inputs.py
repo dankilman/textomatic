@@ -1,5 +1,6 @@
 import json
 import shlex
+import subprocess
 from typing import List, Any, Mapping
 
 import clevercsv
@@ -74,13 +75,35 @@ class ShellInput(Input):
         return rows, header_line
 
 
+class JQInput(Input):
+    lexer = JsonLexer
+
+    def __init__(self, args):
+        self.args = args
+
+    def get_rows(self, text: str, processed_cmd: ProcessedCommand) -> (List[Any], Mapping[int, str]):
+        args = ["jq", "-c"]
+        if self.args:
+            args.append(self.args)
+        try:
+            output = subprocess.check_output(
+                args,
+                stderr=subprocess.STDOUT,
+                input=bytes(text, encoding="utf-8"),
+            ).decode()
+            return output, []
+        except subprocess.CalledProcessError as e:
+            raise ProcessException(e.stdout.decode())
+
+
 registry = Registry(
-    attr="input",
+    attr="inputs",
     tpe=Input,
     default_alias="c",
     data={
         "c": CSVInput(),
         "jl": JsonLinesInput(),
         "sh": ShellInput(),
+        "jq": JQInput,
     },
 )

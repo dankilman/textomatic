@@ -14,19 +14,22 @@ class Registry:
         self.data[alias] = value
 
     def get(self, processed_cmd: ProcessedCommand, safe=False):
-        default = self.data[self.default_alias]
-        processor_data = getattr(processed_cmd, self.attr)
-        if not processor_data:
+        default = [self.data[self.default_alias]]
+        data_processors_configs = getattr(processed_cmd, self.attr)
+        if not data_processors_configs:
             return default
-        alias = processor_data.alias
-        args = processor_data.args
-        try:
-            obj_or_cls = self.data[alias]
-        except KeyError:
-            if safe:
-                return default
-            raise ProcessException(f"Unregistered {self.type.__name__.lower()}: {alias}")
-        if isinstance(obj_or_cls, type) and issubclass(obj_or_cls, self.type):
-            return obj_or_cls(args)
-        else:
-            return obj_or_cls
+        result = []
+        for data_processor_config in data_processors_configs:
+            alias = data_processor_config.alias
+            args = data_processor_config.args
+            try:
+                obj_or_cls = self.data[alias]
+            except KeyError:
+                if safe:
+                    return default
+                raise ProcessException(f"Unregistered {self.type.__name__.lower()}: {alias}")
+            if isinstance(obj_or_cls, type) and issubclass(obj_or_cls, self.type):
+                result.append(obj_or_cls(args))
+            else:
+                result.append(obj_or_cls)
+        return result

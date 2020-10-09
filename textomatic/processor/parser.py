@@ -71,7 +71,7 @@ class ProcessorData(ParseData):
 # general
 OptionalMarker = Optional("?")("optional")
 PrintablesReducedForDefault = Word(string.printable, excludeChars="/")
-PrintablesReducedForArgs = Word(string.printable, excludeChars=")")
+PrintablesReducedForArgs = Word(string.printable, excludeChars="`")
 Default = Optional(Combine(Suppress("/") + PrintablesReducedForDefault + Suppress("/")))("default")
 
 # ref
@@ -113,10 +113,12 @@ TopLevelStructure = EmptyStructure | Structure
 
 # processor (inputs/outputs)
 ProcessorArgsInner = Optional(PrintablesReducedForArgs)
-ProcessorArgs = (Suppress("(") + ProcessorArgsInner + Suppress(")"))("args")
+ProcessorArgs = (Suppress("`") + ProcessorArgsInner + Suppress("`"))("args")
 ProcessorAlias = Word(alphanums)("alias")
 Processor = ProcessorAlias + Optional(ProcessorArgs)
 Processor.setParseAction(lambda t: [ProcessorData(t.alias, (t.args or [""])[0])])
+Processors = (Processor + ZeroOrMore(Suppress(",") + Processor))("processors")
+Processors.setParseAction(lambda t: [t.processors.asList()])
 
 
 # api
@@ -128,8 +130,8 @@ def parse_structure(expr) -> StructureData:
     return _parse(TopLevelStructure, expr)
 
 
-def parse_processor(expr) -> ProcessorData:
-    return _parse(Processor, expr)
+def parse_processors(expr) -> ProcessorData:
+    return _parse(Processors, expr)
 
 
 # internal

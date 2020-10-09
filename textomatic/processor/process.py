@@ -34,14 +34,18 @@ def getsafe(attr, default=None):
 
 def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     processed_cmd, changed = _process_cmd(ctx, cmd)
-    input_obj = inputs.registry.get(processed_cmd)
-    output_obj = outputs.registry.get(processed_cmd)
+    input_objs = inputs.registry.get(processed_cmd)
+    output_objs = outputs.registry.get(processed_cmd)
 
     if trigger == "cmd" and not changed:
         return None
 
-    if trigger != "cmd" or any(attr in changed for attr in ["delimiter", "input", "has_header"]):
-        rows, headers_list = input_obj.get_rows(text, processed_cmd)
+    if trigger != "cmd" or any(attr in changed for attr in ["delimiter", "inputs", "has_header"]):
+        rows, headers_list = text, []
+        for input_obj in input_objs:
+            prev_headers = headers_list
+            rows, headers_list = input_obj.get_rows(rows, processed_cmd)
+            headers_list = headers_list or prev_headers
         headers = {i: h for i, h in enumerate(headers_list)}
         ctx.processed_input = ProcessedInput(rows, headers)
         if headers:
@@ -52,7 +56,10 @@ def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     rows = _process_rows(processed_cmd, headers, rows)
     processed_cmd.headers = _extract_output_headers(processed_cmd.structure, headers)
 
-    return output_obj.create_output(rows, processed_cmd)
+    result = rows
+    for output_obj in output_objs:
+        result = output_obj.create_output(result, processed_cmd)
+    return result
 
 
 def _extract_output_headers(structure: parser.StructureData, input_headers):
@@ -330,20 +337,20 @@ def _process_cmd(ctx, cmd) -> ProcessedCommand:
                 result.structure = DEFAULT_CMD.structure
         elif expression_type == "i":
             if expression_body:
-                result.input = parser.parse_processor(expression_body)
+                result.inputs = parser.parse_processors(expression_body)
             else:
-                result.input = DEFAULT_CMD.input
+                result.input = DEFAULT_CMD.inputs
         elif expression_type == "o":
             if expression_body:
-                result.output = parser.parse_processor(expression_body)
+                result.outputs = parser.parse_processors(expression_body)
             else:
-                result.output = DEFAULT_CMD.output
+                result.outputs = DEFAULT_CMD.outputs
         else:
             raise ProcessException("Unexpected")
 
     previous_command.cmd = cmd
     ctx.processed_command = result
-    for attr in ["cmd", "delimiter", "output", "input", "structure", "types", "has_header"]:
+    for attr in ["cmd", "delimiter", "outputs", "inputs", "structure", "types", "has_header"]:
         if getattr(previous_command, attr) != getattr(result, attr):
             changed.add(attr)
     return result, changed

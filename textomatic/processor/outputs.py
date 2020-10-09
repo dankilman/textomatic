@@ -94,7 +94,7 @@ class HTMLOutput(Output):
 
 
 registry = Registry(
-    attr="output",
+    attr="outputs",
     tpe=Output,
     default_alias="l",
     data={
