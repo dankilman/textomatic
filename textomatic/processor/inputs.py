@@ -10,6 +10,7 @@ from pygments.lexers.special import TextLexer
 
 from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand, MISSING
+from textomatic.processor.common import run_jq
 from textomatic.processor.registry import Registry
 
 DEFAULT_LEXER = PythonLexer
@@ -82,18 +83,7 @@ class JQInput(Input):
         self.args = args
 
     def get_rows(self, text: str, processed_cmd: ProcessedCommand) -> (List[Any], Mapping[int, str]):
-        args = ["jq", "-c"]
-        if self.args:
-            args.append(self.args)
-        try:
-            output = subprocess.check_output(
-                args,
-                stderr=subprocess.STDOUT,
-                input=bytes(text, encoding="utf-8"),
-            ).decode()
-            return output, []
-        except subprocess.CalledProcessError as e:
-            raise ProcessException(e.stdout.decode())
+        return run_jq(text, self.args), []
 
 
 registry = Registry(

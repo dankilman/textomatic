@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import pprint
+import subprocess
 
 from tabulate import tabulate
 from pygments.lexer import Lexer
@@ -11,6 +12,7 @@ from pygments.lexers.python import PythonLexer
 
 from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand
+from textomatic.processor.common import run_jq
 from textomatic.processor.registry import Registry
 
 DEFAULT_LEXER = PythonLexer
@@ -93,6 +95,16 @@ class HTMLOutput(Output):
         return tabulate(rows, tablefmt="html", **kwargs)
 
 
+class JQOutput(Output):
+    lexer = JsonLexer
+
+    def __init__(self, args):
+        self.args = args
+
+    def create_output(self, rows, processed_command: ProcessedCommand) -> str:
+        return run_jq(rows, self.args)
+
+
 registry = Registry(
     attr="outputs",
     tpe=Output,
@@ -104,5 +116,6 @@ registry = Registry(
         "c": CSVOutput(),
         "t": TableOutput(),
         "h": HTMLOutput(),
+        "jq": JQOutput,
     },
 )
