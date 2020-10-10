@@ -180,3 +180,12 @@ o:h
 <tr><td style="text-align: right;">3</td><td style="text-align: right;">4</td></tr>
 </tbody>
 </table>
+
+---
+test jq raw
+--
+{"one": 1}
+--
+r;o:jq`.one`
+--
+1

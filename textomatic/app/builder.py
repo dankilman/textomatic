@@ -134,8 +134,8 @@ class AppBuilder:
                 ]
                 if ctx.copied_to_clipboard:
                     result.append(" [Copied output to clipboard]")
-            inp = ','.join([i.alias for i in cmd.inputs or []] or ["c"])
-            out = ','.join([o.alias for o in cmd.outputs or []] or ["l"])
+            inp = ",".join([i.alias for i in cmd.inputs or []] or ["c"])
+            out = ",".join([o.alias for o in cmd.outputs or []] or ["l"])
             return HTML("".join(result)).format(
                 input=inp,
                 output=out,

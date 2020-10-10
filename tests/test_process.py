@@ -16,6 +16,11 @@ def test_structure(case):
     run_and_assert_process(case)
 
 
+@with_cases("inputs")
+def test_inputs(case):
+    run_and_assert_process(case)
+
+
 @with_cases("input_csv")
 def test_input_csv(case):
     run_and_assert_process(case)
