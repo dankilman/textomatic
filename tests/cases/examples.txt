@@ -49,3 +49,16 @@ h;t:Age:i/76/
 `COMMAND`:
 * `h` says `INPUT` includes a header
 * `t:Age:i/76/` provides a default value when the `Age` column cannot be parsed as integer
+
+---
+Interactive `jq`
+--
+{"one": 1, "two": 2, "three": 3}
+{"one": 1.0, "two": 2.0, "three": 3.0}
+--
+r;o:jq`{o: .one, t1: .two, t2: .three}`
+--
+--
+`COMMAND`:
+* `r` puts evaluation into raw mode where input is not assumed to be raw based
+* `o:jq` use the `jq` output and pass arguments to it wrapped with backticks.

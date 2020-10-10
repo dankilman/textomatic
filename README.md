@@ -146,6 +146,36 @@ vi-insert|COMMAND|live|in:c|out:l|delim:auto|header:true
 > h;t:Age:i/76/                                                                 
 ```
 
+### Interactive `jq`
+`COMMAND`:
+* `r` puts evaluation into raw mode where input is not assumed to be raw based
+* `o:jq` use the `jq` output and pass arguments to it wrapped with backticks.
+```
+INPUT                                  │OUTPUT                                  
+{"one": 1, "two": 2, "three": 3}       │{"o":1,"t1":2,"t2":3}                   
+{"one": 1.0, "two": 2.0, "three": 3.0} │{"o":1,"t1":2,"t2":3}                   
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+                                       │                                        
+vi-insert|COMMAND|live|in:c|out:jq|delim:auto|header:false|raw:true             
+> r;o:jq`{o: .one, t1: .two, t2: .three}`                                       
+```
 
 ## Usage
 `textomatic` is split into 3 parts:
@@ -202,6 +232,7 @@ Used to specify the input format. Currently these are the available inputs:
 * `c` (`csv`, this is the default. The delimiter musn't be a `,` as the name may imply)
 * `jl` (jsonlines)
 * `sh` (shell, e.g. the output of `ps aux`)
+* `jq` (Using [jq](https://stedolan.github.io/jq/))
 
 ##### The `o` expression (output)
 Used to specify the output format. Currently these are the available outputs:
@@ -211,6 +242,7 @@ Used to specify the output format. Currently these are the available outputs:
 * `c` (csv)
 * `t` (pretty printed table)
 * `h` (table html)
+* `jq` (Using [jq](https://stedolan.github.io/jq/))
 
 ##### The `t` expression (types)
 For inputs with no clear types (e.g. csv/shell), all columns are initially assumed to
