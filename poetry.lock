@@ -47,10 +47,6 @@ toml = ">=0.10.1"
 typed-ast = ">=1.4.0"
 typing-extensions = ">=3.7.4"
 
-[package.dependencies.dataclasses]
-python = "<3.7"
-version = ">=0.6"
-
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
@@ -69,7 +65,7 @@ description = "A Python package for handling messy CSV files"
 name = "clevercsv"
 optional = false
 python-versions = ">=3.6.0"
-version = "0.6.4"
+version = "0.6.5"
 
 [package.dependencies]
 chardet = ">=3.0"
@@ -97,31 +93,6 @@ name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.4.3"
-
-[[package]]
-category = "dev"
-description = "A backport of the dataclasses module for Python 3.6"
-marker = "python_version < \"3.7\""
-name = "dataclasses"
-optional = false
-python-versions = "*"
-version = "0.6"
-
-[[package]]
-category = "dev"
-description = "Read metadata from Python packages"
-marker = "python_version < \"3.8\""
-name = "importlib-metadata"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-version = "2.0.0"
-
-[package.dependencies]
-zipp = ">=0.5"
-
-[package.extras]
-docs = ["sphinx", "rst.linker"]
-testing = ["packaging", "pep517", "importlib-resources (>=1.3)"]
 
 [[package]]
 category = "dev"
@@ -166,11 +137,6 @@ name = "pluggy"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.13.1"
-
-[package.dependencies]
-[package.dependencies.importlib-metadata]
-python = "<3.8"
-version = ">=0.12"
 
 [package.extras]
 dev = ["pre-commit", "tox"]
@@ -220,6 +186,17 @@ version = "1.8.0"
 
 [[package]]
 category = "dev"
+description = "Simple VTXXX-compatible terminal emulator."
+name = "pyte"
+optional = false
+python-versions = "*"
+version = "0.8.0"
+
+[package.dependencies]
+wcwidth = "*"
+
+[[package]]
+category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -235,10 +212,6 @@ packaging = "*"
 pluggy = ">=0.12,<1.0"
 py = ">=1.5.0"
 wcwidth = "*"
-
-[package.dependencies.importlib-metadata]
-python = "<3.8"
-version = ">=0.12"
 
 [package.extras]
 checkqa-mypy = ["mypy (v0.761)"]
@@ -303,23 +276,10 @@ optional = false
 python-versions = "*"
 version = "0.2.5"
 
-[[package]]
-category = "dev"
-description = "Backport of pathlib-compatible object wrapper for zip files"
-marker = "python_version < \"3.8\""
-name = "zipp"
-optional = false
-python-versions = ">=3.6"
-version = "3.3.0"
-
-[package.extras]
-docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
-testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
-
 [metadata]
-content-hash = "d01a7894b7faa28d864fcd67707b9fa093d17c6d03e083890b8b9691ff7d642b"
+content-hash = "c4374fd8c2699a6cfa4d0a9f6f5248aa07d1838c30bffc8000cd1d0ad651837b"
 lock-version = "1.0"
-python-versions = "^3.6.1"
+python-versions = "^3.8"
 
 [metadata.files]
 appdirs = [
@@ -342,28 +302,30 @@ chardet = [
     {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
 ]
 clevercsv = [
-    {file = "clevercsv-0.6.4-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:00bb8a4e08e2fa33408ce377deceac582140562d4661539fa3b71f1010563af7"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:082c450feab6aa8a7674aff0b5cfec3ca65284b5cf564cd03702b71522a5f80c"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:0e5e3d5e7b23d3908fe2a514ecfd9554b3b4983a2fd77fd7f0d8be2e49295328"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:f8f8c2196c916bb0272855dc590d0a6d3bc9066e50cc5570a48590e5087002da"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:36e573e48f20fdaa07b1c19fa69026d5b4201cd308eb844f6c2625fc1749fef5"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-win32.whl", hash = "sha256:863cf9f2c6715ed39ac9d8bd97a19aa439dbd78ea84e94c792d06925a266906c"},
-    {file = "clevercsv-0.6.4-cp36-cp36m-win_amd64.whl", hash = "sha256:046db2abc25cc054472a083d107682d429320de0ca903b151067ac180caff410"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a198aaff307a564278b4d048cf805e8c8010af74809e51a4cf500d139aeff779"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:175dba2b9c5c9f541146ad2ff477b932abc677e42c8ec9954a72df5f8ea1f60b"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:7a4824740d284e0fbfe3619399694da355e206bf396071aea12b10945e2b8a48"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:0a09792cfac81a720999687ed70699c8ce1b19cbeda3a985b73a1fb8ee4a4bfe"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:dd8bcfd636c3c99c83c34c4570d0d8022d32aabd42ffd67707ed93562c604428"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-win32.whl", hash = "sha256:617340870571af4f8fe7edcae18a30f74c89e9409cae69e046c84c16327ee7c0"},
-    {file = "clevercsv-0.6.4-cp37-cp37m-win_amd64.whl", hash = "sha256:5a98a9f2c39d8c8f1a175f3525186189369b2c66444cb9e6820a2fef4ae2940d"},
-    {file = "clevercsv-0.6.4-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:8b6ea32465569583025d92b8134b577c150922ebb2a5e6b3feaa0af3cf2a6d9e"},
-    {file = "clevercsv-0.6.4-cp38-cp38-manylinux1_i686.whl", hash = "sha256:c47ee2394f1d15d1728b063d9a5ec68aa4b5aeb689738f3a9f2a0b3ecfe72dd8"},
-    {file = "clevercsv-0.6.4-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:9abda85ceb38e6af7e5b6b15b7dfc5d5f7c2e3065331ff293c9df63d4ec02015"},
-    {file = "clevercsv-0.6.4-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:e3a87abcb57a4d0788ad09cb467f247669dff873fdad4885b684937c5f887f8b"},
-    {file = "clevercsv-0.6.4-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:d98f3274004b8e054864869d029e073b278b5fa0dcb526f615eef432362bb6ce"},
-    {file = "clevercsv-0.6.4-cp38-cp38-win32.whl", hash = "sha256:386d8cbb13aa4471d3876d971c23ce9a407ab6146fadebc29d47fc41de70d6e7"},
-    {file = "clevercsv-0.6.4-cp38-cp38-win_amd64.whl", hash = "sha256:4e4c98fa4f076a888e35d2b569ca5881b8cb33b96ff11168de5d739d5f891567"},
-    {file = "clevercsv-0.6.4.tar.gz", hash = "sha256:46000eb8114a3a7cd926a12e0fe56520db8a4c58f0acf6c9ddc7f2a8f799fff1"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:284087a4f185aab8ec7fc501bb9b3198ebe9d0c79506e829816551104cb72e68"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:082413d07ff79812161ada57cdf46e77777d4fa7abdc9501e26e27883e63bf32"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:8609b6f8b9dc998a96fa56c1331f57da1a8397c5fb926f47910d449e9c7d4a09"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:7c9df4d2e5283eaf007507f1e607dbc19fd7cc81eb5341fea5449e3867cd9478"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:fbc21e3441d38e244a846819c502437f2c1a40c5c1eccca70a385cf7cb0073cf"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-win32.whl", hash = "sha256:c4e1e6fb6c6bed724042fbdfc7cee032dcaba6e103c984f09d46257343117000"},
+    {file = "clevercsv-0.6.5-cp36-cp36m-win_amd64.whl", hash = "sha256:ae579c45ad60e23d2c74a4cdd7b530b0194f5593ddac95c9112965c35e3dfb58"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:84b4fdde5fad712a5af86ac5124da4dac612d85c2a5236d645da37f2a97a8da1"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:f893c7fc3ec879191bc323fcbf7f529e26ddf46c7ed09989c8c6e8a3914cfe02"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:39dd90a2a43db95df9f7b37b940da6ad956ffe3c75c00ba5a897c1f89c37bb74"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:45bd5cc5eb2d65a3f9ce860bb75654eabaea248c6f07cd204cca2d2d4710a9cc"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:f98735b71a8ca44212fe4cabfe94b14b2844dd327346db5ffb53447fd8465022"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-win32.whl", hash = "sha256:5e2609bfc9caf7fdb7e0925b166b6c21e053f7c2f2c733c204a2e502f1be8b74"},
+    {file = "clevercsv-0.6.5-cp37-cp37m-win_amd64.whl", hash = "sha256:79430006b50207884a6ed802ad224d6cc16c696ae99edf9a4e1e4909afb5c224"},
+    {file = "clevercsv-0.6.5-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:1c920c38fad9c51ac582cdcabf5763324b020a20c2758d44b0391560d8545d4e"},
+    {file = "clevercsv-0.6.5-cp38-cp38-manylinux1_i686.whl", hash = "sha256:8daf0f2895e48eb125e3a7fcf3fd8512e8c8ec87b1bb878242e0fe15d54fec6d"},
+    {file = "clevercsv-0.6.5-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:a2f5f7f32446d000f457a50f8b591ecf27ab739150b169262116f493d17e0ee6"},
+    {file = "clevercsv-0.6.5-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:05a6e413d3f76d981086e72084dc104d6f7bae2b2fadc3ecee37b5c5ec5ac628"},
+    {file = "clevercsv-0.6.5-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:25f406656c7efe52b4c16e4c783bd68c7476f5fee672ad98e5ebfd765103fa83"},
+    {file = "clevercsv-0.6.5-cp38-cp38-win32.whl", hash = "sha256:6d5e3360f1f4677ce33339929f02a2915cceddb6c3ec295381fcb4951a428c0d"},
+    {file = "clevercsv-0.6.5-cp38-cp38-win_amd64.whl", hash = "sha256:49869db95af51bb2f7d79aa9e1142622dc1d6fe1ea4a2760e80cd49b7a72b22c"},
+    {file = "clevercsv-0.6.5-cp39-cp39-win32.whl", hash = "sha256:a0f35b15403829375435004ab5f9fac5b980d7a9425b3d05e1df35ba69e049f3"},
+    {file = "clevercsv-0.6.5-cp39-cp39-win_amd64.whl", hash = "sha256:7f70c80a617ff32acbc2ea1a8832977a249c58ac22012fe9c6216f841e7d3db5"},
+    {file = "clevercsv-0.6.5.tar.gz", hash = "sha256:01129ca52157f4b5c5e0c357e23b468c614a112cfd2ec15536ed56789a308c94"},
 ]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
@@ -372,14 +334,6 @@ click = [
 colorama = [
     {file = "colorama-0.4.3-py2.py3-none-any.whl", hash = "sha256:7d73d2a99753107a36ac6b455ee49046802e59d9d076ef8e47b61499fa29afff"},
     {file = "colorama-0.4.3.tar.gz", hash = "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"},
-]
-dataclasses = [
-    {file = "dataclasses-0.6-py3-none-any.whl", hash = "sha256:454a69d788c7fda44efd71e259be79577822f5e3f53f029a22d08004e951dc9f"},
-    {file = "dataclasses-0.6.tar.gz", hash = "sha256:6988bd2b895eef432d562370bb707d540f32f7360ab13da45340101bc2307d84"},
-]
-importlib-metadata = [
-    {file = "importlib_metadata-2.0.0-py2.py3-none-any.whl", hash = "sha256:cefa1a2f919b866c5beb7c9f7b0ebb4061f30a8a9bf16d609b000e2dfaceb9c3"},
-    {file = "importlib_metadata-2.0.0.tar.gz", hash = "sha256:77a540690e24b0305878c37ffd421785a6f7e53c8b5720d211b211de8d0e95da"},
 ]
 more-itertools = [
     {file = "more-itertools-8.5.0.tar.gz", hash = "sha256:6f83822ae94818eae2612063a5101a7311e68ae8002005b5e05f03fd74a86a20"},
@@ -419,6 +373,9 @@ pyparsing = [
 ]
 pyperclip = [
     {file = "pyperclip-1.8.0.tar.gz", hash = "sha256:b75b975160428d84608c26edba2dec146e7799566aea42c1fe1b32e72b6028f2"},
+]
+pyte = [
+    {file = "pyte-0.8.0.tar.gz", hash = "sha256:7e71d03e972d6f262cbe8704ff70039855f05ee6f7ad9d7129df9c977b5a88c5"},
 ]
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
@@ -490,8 +447,4 @@ typing-extensions = [
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
-]
-zipp = [
-    {file = "zipp-3.3.0-py3-none-any.whl", hash = "sha256:eed8ec0b8d1416b2ca33516a37a08892442f3954dee131e92cfd92d8fe3e7066"},
-    {file = "zipp-3.3.0.tar.gz", hash = "sha256:64ad89efee774d1897a58607895d80789c59778ea02185dd846ac38394a8642b"},
 ]

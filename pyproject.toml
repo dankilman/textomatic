@@ -1,8 +1,14 @@
 [tool.poetry]
 name = "textomatic"
-version = "0.1.0"
-description = "Scratchpad for tabular data transformations"
+version = "0.2.0"
+description = "Scratchpad for tabular data transformations, and then some"
 authors = ["Dan Kilman <dankilman@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/dankilman/textomatic"
+repository = "https://github.com/dankilman/textomatic"
+documentation = "https://github.com/dankilman/textomatic"
+keywords = ["scratchpad", "transformations", "tabular-data"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -17,10 +23,11 @@ tabulate = "^0.8.7"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^20.8b1"
+pyte = "^0.8.0"
 
 [tool.poetry.scripts]
 tm = "textomatic.main:main"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
