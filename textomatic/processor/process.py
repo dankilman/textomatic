@@ -2,7 +2,7 @@ import ast
 import json
 
 from textomatic.context import ProcessContext
-from textomatic.processor import parser, outputs, inputs
+from textomatic.processor import parser, outputs, inputs, macros
 from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedInput, ProcessedCommand, NO_DEFAULT, MISSING
 
@@ -40,7 +40,7 @@ def process(text: str, cmd: str, ctx: ProcessContext, trigger: str = None):
     if trigger == "cmd" and not changed:
         return None
 
-    if trigger != "cmd" or any(attr in changed for attr in ["delimiter", "inputs", "has_header"]):
+    if trigger != "cmd" or any(attr in changed for attr in ["delimiter", "inputs", "has_header", "raw"]):
         rows, headers_list = text, []
         for input_obj in input_objs:
             prev_headers = headers_list
@@ -296,6 +296,14 @@ def _build_row_structure_processor(structure, headers, headers_inverse):
 
 def _process_cmd(ctx, cmd) -> ProcessedCommand:
     cmd = cmd.strip()
+
+    if cmd.startswith("@"):
+        alias, *args = cmd.split(" ", 1)
+        alias = alias[1:]
+        macro = macros.get(alias)
+        if args:
+            args = macro['split'](args[0].strip())
+        cmd = macro['fn'](*args)
 
     changed = set()
     if cmd == ":" or (ctx.processed_command and ctx.processed_command.cmd == cmd):
