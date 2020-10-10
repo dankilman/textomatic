@@ -2,16 +2,13 @@ import csv
 import io
 import json
 import pprint
-import subprocess
 
 from pygments.lexers.special import TextLexer
 from tabulate import tabulate
-from pygments.lexer import Lexer
 from pygments.lexers.data import JsonLexer
 from pygments.lexers.html import HtmlLexer
 from pygments.lexers.python import PythonLexer
 
-from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand
 from textomatic.processor.common import run_jq
 from textomatic.processor.registry import Registry

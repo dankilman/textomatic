@@ -1,6 +1,5 @@
 import json
 import shlex
-import subprocess
 from typing import List, Any, Mapping
 
 import clevercsv
@@ -8,7 +7,6 @@ from pygments.lexers.data import JsonLexer
 from pygments.lexers.python import PythonLexer
 from pygments.lexers.special import TextLexer
 
-from textomatic.exceptions import ProcessException
 from textomatic.model import ProcessedCommand, MISSING
 from textomatic.processor.common import run_jq
 from textomatic.processor.registry import Registry
