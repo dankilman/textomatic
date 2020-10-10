@@ -21,10 +21,10 @@ class Case:
 
 def load_cases(name):
     with open(os.path.join(os.path.dirname(__file__), "cases", f"{name}.txt")) as f:
-        cases = f.read()
-    cases = [c.strip() for c in cases.split("---") if c.strip()]
+        _cases = f.read()
+    _cases = [c.strip() for c in _cases.split("---") if c.strip()]
     parsed_cases = []
-    for case in cases:
+    for case in _cases:
         case_parts = case.split("--")
         assert len(case_parts) in {4, 5}
         case_parts = [c.strip() for c in case_parts]
@@ -39,8 +39,15 @@ def load_cases(name):
     return parsed_cases
 
 
-def with_cases(name):
-    return pytest.mark.parametrize("case", load_cases(name), ids=lambda c: f"{c.name} [{c.cmd}]")
+def cases(name):
+    def wrapper(_):
+        @pytest.mark.parametrize("case", load_cases(name), ids=lambda c: f"{c.name} [{c.cmd}]")
+        def f(case):
+            run_and_assert_process(case)
+
+        return f
+
+    return wrapper
 
 
 def run_and_assert_process(case):

@@ -1,0 +1,20 @@
+---
+test jq
+--
+{
+    "one": 1,
+    "two": 2
+}
+--
+@jq
+--
+{"one":1,"two":2}
+
+---
+test jq arg
+--
+{"one": 1, "two": 2}
+--
+@jq (.one + .two)
+--
+3

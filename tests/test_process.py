@@ -1,46 +1,51 @@
-from tests.framework import with_cases, run_and_assert_process
+from tests.framework import cases
 
 
-@with_cases("process_cmd")
-def test_process_cmd(case):
-    run_and_assert_process(case)
+@cases("process_cmd")
+def test_process_cmd():
+    pass
 
 
-@with_cases("types")
-def test_types(case):
-    run_and_assert_process(case)
+@cases("types")
+def test_types():
+    pass
 
 
-@with_cases("structure")
-def test_structure(case):
-    run_and_assert_process(case)
+@cases("structure")
+def test_structure():
+    pass
 
 
-@with_cases("inputs")
-def test_inputs(case):
-    run_and_assert_process(case)
+@cases("inputs")
+def test_inputs():
+    pass
 
 
-@with_cases("input_csv")
-def test_input_csv(case):
-    run_and_assert_process(case)
+@cases("input_csv")
+def test_input_csv():
+    pass
 
 
-@with_cases("input_jsonlines")
-def test_input_jsonlines(case):
-    run_and_assert_process(case)
+@cases("input_jsonlines")
+def test_input_jsonlines():
+    pass
 
 
-@with_cases("input_shell")
-def test_input_shell(case):
-    run_and_assert_process(case)
+@cases("input_shell")
+def test_input_shell():
+    pass
 
 
-@with_cases("outputs")
-def test_outputs(case):
-    run_and_assert_process(case)
+@cases("outputs")
+def test_outputs():
+    pass
 
 
-# @with_cases('single')
-# def test_single(case):
-#     run_and_assert_process(case)
+@cases("macros")
+def test_macros():
+    pass
+
+
+# @cases('single')
+# def test_single():
+#     pass
