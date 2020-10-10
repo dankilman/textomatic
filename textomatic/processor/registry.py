@@ -3,19 +3,24 @@ from textomatic.model import ProcessedCommand
 
 
 class Registry:
-    def __init__(self, attr, tpe, default_alias, data=None):
+    def __init__(self, attr, tpe, default_alias, data=None, default_raw="n"):
         self.attr = attr
         self.type = tpe
         self.data = data or {}
         self.default_alias = default_alias
+        self.default_raw = default_raw
 
-    def register(self, alias, value):
-        assert issubclass(value, self.type) or isinstance(value, self.type)
-        self.data[alias] = value
+    def register(self, alias):
+        def registrar(value):
+            assert (isinstance(value, type) and issubclass(value, self.type)) or isinstance(value, self.type)
+            self.data[alias] = value
+            return value
+
+        return registrar
 
     def get(self, processed_cmd: ProcessedCommand, safe=False):
         if processed_cmd.raw:
-            default = [self.data["n"]]
+            default = [self.data[self.default_raw]]
         else:
             default = [self.data[self.default_alias]]
         data_processors_configs = getattr(processed_cmd, self.attr)
