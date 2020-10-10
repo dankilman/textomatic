@@ -302,8 +302,8 @@ def _process_cmd(ctx, cmd) -> ProcessedCommand:
         alias = alias[1:]
         macro = macros.get(alias)
         if args:
-            args = macro['split'](args[0].strip())
-        cmd = macro['fn'](*args)
+            args = macro["split"](args[0].strip())
+        cmd = macro["fn"](*args)
 
     changed = set()
     if cmd == ":" or (ctx.processed_command and ctx.processed_command.cmd == cmd):
