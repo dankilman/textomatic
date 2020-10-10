@@ -1,51 +1,51 @@
 from tests.framework import cases
 
 
-@cases("process_cmd")
+@cases
 def test_process_cmd():
     pass
 
 
-@cases("types")
+@cases
 def test_types():
     pass
 
 
-@cases("structure")
+@cases
 def test_structure():
     pass
 
 
-@cases("inputs")
+@cases
 def test_inputs():
     pass
 
 
-@cases("input_csv")
+@cases
 def test_input_csv():
     pass
 
 
-@cases("input_jsonlines")
+@cases
 def test_input_jsonlines():
     pass
 
 
-@cases("input_shell")
+@cases
 def test_input_shell():
     pass
 
 
-@cases("outputs")
+@cases
 def test_outputs():
     pass
 
 
-@cases("macros")
+@cases
 def test_macros():
     pass
 
 
-# @cases('single')
+# @cases
 # def test_single():
 #     pass

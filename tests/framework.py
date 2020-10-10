@@ -39,15 +39,16 @@ def load_cases(name):
     return parsed_cases
 
 
-def cases(name):
-    def wrapper(_):
-        @pytest.mark.parametrize("case", load_cases(name), ids=lambda c: f"{c.name} [{c.cmd}]")
-        def f(case):
-            run_and_assert_process(case)
+def cases(fn):
+    prefix = len("test_")
+    fn_name = fn.__name__
+    name = fn_name[prefix:]
 
-        return f
+    @pytest.mark.parametrize("c", load_cases(name), ids=lambda c: f"{c.name} [{c.cmd}]")
+    def f(c):
+        run_and_assert_process(c)
 
-    return wrapper
+    return f
 
 
 def run_and_assert_process(case):
