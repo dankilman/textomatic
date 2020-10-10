@@ -83,7 +83,15 @@ class JQInput(Input):
         self.args = args
 
     def get_rows(self, text: str, processed_cmd: ProcessedCommand) -> (List[Any], Mapping[int, str]):
+
         return run_jq(text, self.args), []
+
+
+class NopInput(Input):
+    lexer = TextLexer
+
+    def get_rows(self, text: str, processed_cmd: ProcessedCommand) -> (List[Any], Mapping[int, str]):
+        return text, []
 
 
 registry = Registry(
@@ -95,5 +103,6 @@ registry = Registry(
         "jl": JsonLinesInput(),
         "sh": ShellInput(),
         "jq": JQInput,
+        "n": NopInput(),
     },
 )

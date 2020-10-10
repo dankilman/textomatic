@@ -14,7 +14,10 @@ class Registry:
         self.data[alias] = value
 
     def get(self, processed_cmd: ProcessedCommand, safe=False):
-        default = [self.data[self.default_alias]]
+        if processed_cmd.raw:
+            default = [self.data["n"]]
+        else:
+            default = [self.data[self.default_alias]]
         data_processors_configs = getattr(processed_cmd, self.attr)
         if not data_processors_configs:
             return default

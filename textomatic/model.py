@@ -12,6 +12,7 @@ class ProcessedCommand:
     types: object = None
     has_header: bool = False
     headers: dict = None
+    raw: bool = False
 
 
 @dataclass

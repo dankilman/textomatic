@@ -97,6 +97,8 @@ def _extract_structure_field_name(field: parser.ParseData, headers):
 
 
 def _process_rows(processed_cmd, headers, rows):
+    if processed_cmd.raw:
+        return rows
     headers_inverse = {h: i for i, h in headers.items()}
     type_processors = _build_row_types_processor(processed_cmd.types, headers_inverse)
     structure_processor = _build_row_structure_processor(processed_cmd.structure, headers, headers_inverse)
@@ -314,6 +316,9 @@ def _process_cmd(ctx, cmd) -> ProcessedCommand:
         if expression == "h":
             result.has_header = True
             continue
+        if expression == "r":
+            result.raw = True
+            continue
         expression_split = expression.split(":", 1)
         if len(expression_split) < 2:
             continue
@@ -350,7 +355,7 @@ def _process_cmd(ctx, cmd) -> ProcessedCommand:
 
     previous_command.cmd = cmd
     ctx.processed_command = result
-    for attr in ["cmd", "delimiter", "outputs", "inputs", "structure", "types", "has_header"]:
+    for attr in ["cmd", "delimiter", "outputs", "inputs", "structure", "types", "has_header", "raw"]:
         if getattr(previous_command, attr) != getattr(result, attr):
             changed.add(attr)
     return result, changed

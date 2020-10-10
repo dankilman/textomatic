@@ -4,6 +4,7 @@ import json
 import pprint
 import subprocess
 
+from pygments.lexers.special import TextLexer
 from tabulate import tabulate
 from pygments.lexer import Lexer
 from pygments.lexers.data import JsonLexer
@@ -105,6 +106,13 @@ class JQOutput(Output):
         return run_jq(rows, self.args)
 
 
+class NopOutput(Output):
+    lexer = TextLexer
+
+    def create_output(self, rows, processed_command: ProcessedCommand) -> str:
+        return rows
+
+
 registry = Registry(
     attr="outputs",
     tpe=Output,
@@ -117,5 +125,6 @@ registry = Registry(
         "t": TableOutput(),
         "h": HTMLOutput(),
         "jq": JQOutput,
+        "n": NopOutput(),
     },
 )
