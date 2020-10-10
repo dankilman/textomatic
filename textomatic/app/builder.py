@@ -91,6 +91,8 @@ class AppBuilder:
                 trigger=trigger,
             )
             if result is not None:
+                if not isinstance(result, str):
+                    result = str(result)
                 self.output_lexer.enabled = len(result) < self.lexer_threshold
                 ctx.output_buffer._set_text(result)
             ctx.dirty = False
@@ -127,13 +129,16 @@ class AppBuilder:
                     "in:{input}|",
                     "out:{output}|",
                     "delim:{delimiter}|",
-                    f"header:{str(cmd.has_header).lower()}",
+                    f"header:{str(cmd.has_header).lower()}|",
+                    f"raw:{str(cmd.raw).lower()}",
                 ]
                 if ctx.copied_to_clipboard:
                     result.append(" [Copied output to clipboard]")
+            inp = ','.join([i.alias for i in cmd.inputs or []] or ["c"])
+            out = ','.join([o.alias for o in cmd.outputs or []] or ["l"])
             return HTML("".join(result)).format(
-                input=cmd.inputs[0].alias if cmd.inputs else "c",
-                output=cmd.outputs[0].alias if cmd.outputs else "l",
+                input=inp,
+                output=out,
                 delimiter=as_printable(cmd.delimiter) or "auto",
                 current_error=str(ctx.current_error),
             )
