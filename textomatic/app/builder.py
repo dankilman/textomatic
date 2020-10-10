@@ -22,6 +22,7 @@ from prompt_toolkit.widgets import FormattedTextToolbar, VerticalLine, Dialog, L
 
 from textomatic import context
 from textomatic.app import style
+from textomatic.app.lexer import CommandLexer
 from textomatic.processor import outputs, inputs
 from textomatic.exceptions import ProcessException
 from textomatic.app.keys import kb, cmd_kb
@@ -41,11 +42,22 @@ class AppBuilder:
         self.input_lexer = ToggledLexer(inputs.registry, take_last=False)
         self.output_lexer = ToggledLexer(outputs.registry, take_last=True)
 
-    def create_app(self):
+    def create_app(self, focus):
         ctx = self.ctx
         ctx.cmd_buffer.on_text_changed += self.process_key
         ctx.input_buffer.on_text_changed += self.process_key
         ctx.cmd_buffer.cursor_position = len(ctx.cmd_buffer.text)
+        if focus:
+            focused_element = {
+                "COMMAND": ctx.cmd_buffer,
+                "c": ctx.cmd_buffer,
+                "INPUT": ctx.input_buffer,
+                "i": ctx.input_buffer,
+                "OUTPUT": ctx.output_buffer,
+                "o": ctx.output_buffer,
+            }[focus]
+        else:
+            focused_element = ctx.cmd_buffer if ctx.input_buffer.text else ctx.input_buffer
         layout = Layout(
             FloatContainer(
                 HSplit(
@@ -59,7 +71,7 @@ class AppBuilder:
                     Float(self.create_help()),
                 ],
             ),
-            focused_element=ctx.cmd_buffer if ctx.input_buffer.text else ctx.input_buffer,
+            focused_element=focused_element,
         )
         return Application(
             key_bindings=kb,
@@ -180,6 +192,7 @@ class AppBuilder:
                 focus_on_click=True,
                 input_processors=[BeforeInput(get_cmd_prefix)],
                 key_bindings=cmd_kb,
+                lexer=PygmentsLexer(CommandLexer),
             ),
             height=1,
         )
@@ -230,7 +243,7 @@ def process_one():
     builder.process_key()
 
 
-def create_app():
+def create_app(focus):
     builder = AppBuilder()
     builder.process_key()
-    return builder.create_app()
+    return builder.create_app(focus)

@@ -9,11 +9,37 @@ from textomatic.app.builder import create_app, process_one
 
 @click.command()
 @click.argument("path", nargs=-1)
-@click.option("-c", "--command", default="")
-@click.option("-p", "--process-and-exit", is_flag=True)
-@click.option("-h", "--horizontal", is_flag=True)
-@click.option("-m", "--manual", is_flag=True)
-def main(path, command, process_and_exit, horizontal, manual):
+@click.option(
+    "-c",
+    "--command",
+    default="",
+    help="Start with an initial COMMAND",
+)
+@click.option(
+    "-p",
+    "--process-and-exit",
+    is_flag=True,
+    help="Run process on INPUT and COMMAND and exit without showing the UI",
+)
+@click.option(
+    "-h",
+    "--horizontal",
+    is_flag=True,
+    help="Start with a horizontal split between the INPUT and OUTPUT",
+)
+@click.option(
+    "-m",
+    "--manual",
+    is_flag=True,
+    help="Start with manual mode enabled. In manual mode, OUTPUT is only updated on demand",
+)
+@click.option(
+    "-f",
+    "--focus",
+    type=click.Choice(["COMMAND", "INPUT", "OUTPUT", "c", "i", "o"]),
+    help="Start the specified component focused",
+)
+def main(path, command, process_and_exit, horizontal, manual, focus):
     if len(path) > 1:
         raise click.ClickException("Only one path argument is supported")
 
@@ -41,7 +67,7 @@ def main(path, command, process_and_exit, horizontal, manual):
         ctx.non_interactive = True
         process_one()
     else:
-        ctx.app = create_app()
+        ctx.app = create_app(focus)
         with patch_stdout():
             ctx.app.run()
 
